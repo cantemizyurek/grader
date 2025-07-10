@@ -24,7 +24,7 @@ export function QuestionsSection({ questions }: { questions: string }) {
           <div className="text-center py-8">
             <p className="text-gray-500 font-medium">No questions submitted</p>
             <p className="text-sm text-gray-400 mt-1">
-              Student didn't ask any questions
+              Student didn&apos;t ask any questions
             </p>
           </div>
         )}

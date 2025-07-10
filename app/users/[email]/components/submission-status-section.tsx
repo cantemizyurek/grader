@@ -1,17 +1,15 @@
-import { motion, animate } from 'motion/react'
-import { useEffect, useState } from 'react'
+import { motion } from 'motion/react'
 import NumberFlow from '@number-flow/react'
 
 interface SubmissionStatusSectionProps {
   daysLate: number
   onDaysLateChange: (days: number) => void
-  itemVariants: any
+  itemVariants?: any
 }
 
 export function SubmissionStatusSection({
   daysLate,
   onDaysLateChange,
-  itemVariants,
 }: SubmissionStatusSectionProps) {
   return (
     <div className="text-center">
@@ -19,7 +17,7 @@ export function SubmissionStatusSection({
         Submission Status
       </h3>
       <div className="inline-flex bg-gray-50 rounded-full p-1 border border-gray-200">
-        {[0, 1, 2, 3, 4].map((days, index) => (
+        {[0, 1, 2, 3, 4].map((days) => (
           <motion.button
             key={days}
             onClick={() => onDaysLateChange(days)}

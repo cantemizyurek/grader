@@ -8,39 +8,17 @@ import { QuestionsSection } from './components/questions-section'
 import { LearnedSection } from './components/learned-section'
 import { NotLearnedSection } from './components/not-learned-section'
 import { SharedContentSection } from './components/shared-content-section'
-import { useState } from 'react'
 import { SharingSection } from './components/sharing-section'
 import { Button } from '@/components/ui/button'
 import { ArrowLeftIcon, Loader2, SaveIcon } from 'lucide-react'
 import { saveUser } from './action'
 import Link from 'next/link'
 import { useTransition } from 'react'
+import { useGradingForm } from '@/lib/hooks/use-grading-form'
 
 export default function PageClient({ user }: { user: User }) {
   const [isPending, startTransition] = useTransition()
-  const [presentationScore, setPresentationScore] = useState(
-    user.score.presentation.score ?? 0
-  )
-  const [presentationFeedback, setPresentationFeedback] = useState(
-    user.score.presentation.feedback ?? ''
-  )
-  const [activitiesScore, setActivitiesScore] = useState(
-    user.score.activities.score ?? 0
-  )
-  const [activitiesFeedback, setActivitiesFeedback] = useState(
-    user.score.activities.feedback ?? ''
-  )
-  const [questionsScore, setQuestionsScore] = useState(
-    user.score.questions.score ?? 0
-  )
-  const [questionsFeedback, setQuestionsFeedback] = useState(
-    user.score.questions.feedback ?? ''
-  )
-  const [daysLate, setDaysLate] = useState(user.late || 0)
-  const [sharing, setSharing] = useState({
-    discord: user.score.discordShare ?? false,
-    socialMedia: user.score.socialShare ?? false,
-  })
+  const { formState, updateField, updateSharing, getUpdatedUser } = useGradingForm(user)
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-12 space-y-16 relative">
@@ -51,22 +29,22 @@ export default function PageClient({ user }: { user: User }) {
 
       <VideoSection
         loomUrl={user.loom}
-        score={presentationScore}
-        feedback={presentationFeedback}
-        onScoreChange={setPresentationScore}
-        onFeedbackChange={setPresentationFeedback}
+        score={formState.presentationScore}
+        feedback={formState.presentationFeedback}
+        onScoreChange={(value) => updateField('presentationScore', value)}
+        onFeedbackChange={(value) => updateField('presentationFeedback', value)}
       />
 
       <NotebookSection
         notebookUrl={user.notebook}
-        activitiesScore={activitiesScore}
-        activitiesFeedback={activitiesFeedback}
-        questionsScore={questionsScore}
-        questionsFeedback={questionsFeedback}
-        onActivitiesScoreChange={setActivitiesScore}
-        onActivitiesFeedbackChange={setActivitiesFeedback}
-        onQuestionsScoreChange={setQuestionsScore}
-        onQuestionsFeedbackChange={setQuestionsFeedback}
+        activitiesScore={formState.activitiesScore}
+        activitiesFeedback={formState.activitiesFeedback}
+        questionsScore={formState.questionsScore}
+        questionsFeedback={formState.questionsFeedback}
+        onActivitiesScoreChange={(value) => updateField('activitiesScore', value)}
+        onActivitiesFeedbackChange={(value) => updateField('activitiesFeedback', value)}
+        onQuestionsScoreChange={(value) => updateField('questionsScore', value)}
+        onQuestionsFeedbackChange={(value) => updateField('questionsFeedback', value)}
       />
 
       <QuestionsSection questions={user.questions} />
@@ -78,14 +56,14 @@ export default function PageClient({ user }: { user: User }) {
       <SharedContentSection sharedContent={user.share} />
 
       <SubmissionStatusSection
-        daysLate={daysLate}
-        onDaysLateChange={setDaysLate}
+        daysLate={formState.daysLate}
+        onDaysLateChange={(value) => updateField('daysLate', value)}
         itemVariants={{}}
       />
 
       <SharingSection
-        sharing={sharing}
-        onSharingChange={setSharing}
+        sharing={formState.sharing}
+        onSharingChange={updateSharing}
         itemVariants={{}}
       />
 
@@ -108,26 +86,7 @@ export default function PageClient({ user }: { user: User }) {
               size="sm"
               onClick={() =>
                 startTransition(async () => {
-                  await saveUser({
-                    ...user,
-                    late: daysLate,
-                    score: {
-                      activities: {
-                        score: activitiesScore,
-                        feedback: activitiesFeedback,
-                      },
-                      questions: {
-                        score: questionsScore,
-                        feedback: questionsFeedback,
-                      },
-                      presentation: {
-                        score: presentationScore,
-                        feedback: presentationFeedback,
-                      },
-                      discordShare: sharing.discord,
-                      socialShare: sharing.socialMedia,
-                    },
-                  })
+                  await saveUser(getUpdatedUser())
                 })
               }
             >

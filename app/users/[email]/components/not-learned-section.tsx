@@ -11,7 +11,7 @@ export function NotLearnedSection({ notLearned }: { notLearned: string }) {
         </div>
 
         <h4 className="text-lg font-medium text-gray-900 mb-4 text-center">
-          Student's Learning Gaps
+          Student&apos;s Learning Gaps
         </h4>
 
         {notLearned && notLearned.trim() ? (
@@ -24,7 +24,7 @@ export function NotLearnedSection({ notLearned }: { notLearned: string }) {
           <div className="text-center py-8">
             <p className="text-gray-500 font-medium">No areas identified</p>
             <p className="text-sm text-gray-400 mt-1">
-              Student didn't identify any learning gaps
+              Student didn&apos;t identify any learning gaps
             </p>
           </div>
         )}

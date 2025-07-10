@@ -1,6 +1,7 @@
 import Papa from 'papaparse'
 import fs from 'fs'
 import path from 'path'
+import { config } from '../lib/config'
 
 export async function readCSVFromFile(filePath: string): Promise<unknown[]> {
   try {
@@ -19,7 +20,7 @@ export async function readCSVFromFile(filePath: string): Promise<unknown[]> {
   }
 }
 
-export function readCSVFromUpload(file: File): Promise<Record<string, unknown>[]> {
+export function readCSVFromUpload(file: File): Promise<unknown[]> {
   return new Promise((resolve, reject) => {
     Papa.parse(file, {
       header: true,
@@ -75,7 +76,7 @@ function createInitialScore() {
 }
 
 async function main() {
-  const MUST_BE_SUBMITTED_BEFORE = new Date('7/2/2025 23:59:59')
+  const MUST_BE_SUBMITTED_BEFORE = config.grading.submissionDeadline
 
   const data = await convertCSVToJSON()
   if (!data) {

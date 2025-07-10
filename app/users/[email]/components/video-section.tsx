@@ -1,4 +1,3 @@
-import { motion } from 'motion/react'
 import { PlayIcon } from 'lucide-react'
 import { ScoreSelector } from '@/components/ui/score-selector'
 

@@ -64,7 +64,7 @@ export function SharedContentSection({
           <div className="text-center py-8">
             <p className="text-gray-500 font-medium">No shared content</p>
             <p className="text-sm text-gray-400 mt-1">
-              Student didn't share any additional resources
+              Student didn&apos;t share any additional resources
             </p>
           </div>
         )}

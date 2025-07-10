@@ -1,8 +1,8 @@
-import { getUserPreviews } from '@/lib/db'
+import { db } from '@/lib/database'
 import PageClient from './page.client'
 
-export default function Home() {
-  const users = getUserPreviews()
+export default async function Home() {
+  const users = await db.getUserPreviews()
 
   return <PageClient users={users} />
 }

@@ -26,7 +26,7 @@ export function LearnedSection({ learned }: { learned: string }) {
               No learning outcomes recorded
             </p>
             <p className="text-sm text-gray-400 mt-1">
-              Student didn't specify what they learned
+              Student didn&apos;t specify what they learned
             </p>
           </div>
         )}

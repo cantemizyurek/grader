@@ -1,11 +1,10 @@
 import { motion } from 'motion/react'
-import { useState } from 'react'
 import NumberFlow from '@number-flow/react'
 
 interface SharingSectionProps {
   sharing: { discord: boolean; socialMedia: boolean }
   onSharingChange: (sharing: { discord: boolean; socialMedia: boolean }) => void
-  itemVariants: any
+  itemVariants?: any
 }
 
 export function SharingSection({
