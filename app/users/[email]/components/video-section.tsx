@@ -55,7 +55,7 @@ export function VideoSection({
         <div className="text-center">
           <h4 className="text-sm font-medium text-gray-700 mb-4">Score</h4>
           <ScoreSelector
-            scores={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+            scores={[0, 1, 2, 3, 4, 5]}
             selectedScore={score}
             onScoreChange={onScoreChange}
             layoutId="activeVideoScoreTab"
