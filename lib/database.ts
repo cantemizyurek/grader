@@ -32,7 +32,7 @@ class Database {
 
     await this.ensureDataFile()
     const content = await fs.readFile(this.dataPath, 'utf8')
-    
+
     try {
       this.cache = JSON.parse(content) as User[]
       return this.cache
@@ -55,7 +55,11 @@ class Database {
       return 'not-started'
     }
 
-    if (activities.score !== null && questions.score !== null && presentation.score !== null) {
+    if (
+      activities.score !== null &&
+      questions.score !== null &&
+      presentation.score !== null
+    ) {
       return 'done'
     }
 
@@ -68,8 +72,10 @@ class Database {
     if (user.score.activities.score) score += user.score.activities.score
     if (user.score.questions.score) score += user.score.questions.score
     if (user.score.presentation.score) score += user.score.presentation.score
-    if (user.score.discordShare) score += config.grading.bonuses.discordSharePoints
-    if (user.score.socialShare) score += config.grading.bonuses.socialSharePoints
+    if (user.score.discordShare)
+      score += config.grading.bonuses.discordSharePoints
+    if (user.score.socialShare)
+      score += config.grading.bonuses.socialSharePoints
 
     if (user.late) score -= user.late * config.grading.penalties.lateDayPenalty
 
@@ -78,7 +84,7 @@ class Database {
 
   async getUserPreviews(): Promise<UserPreview[]> {
     const users = await this.loadData()
-    
+
     return users.map((user) => ({
       name: user.name,
       email: user.email,
@@ -96,7 +102,7 @@ class Database {
   async saveUser(user: User): Promise<void> {
     const users = await this.loadData()
     const index = users.findIndex((u) => u.email === user.email)
-    
+
     if (index !== -1) {
       users[index] = user
     } else {
@@ -111,6 +117,5 @@ class Database {
   }
 }
 
-// Create singleton instance
 const dbPath = path.join(process.cwd(), 'data', 'data.json')
 export const db = new Database(dbPath)
