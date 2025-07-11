@@ -1,5 +1,6 @@
 'use client'
 
+import { Textarea } from '@/components/ui/textarea'
 import { motion } from 'motion/react'
 
 interface OverallFeedbackSectionProps {
@@ -12,25 +13,20 @@ export function OverallFeedbackSection({
   onFeedbackChange,
 }: OverallFeedbackSectionProps) {
   return (
-    <motion.div
-      className="space-y-6"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
+    <div className="space-y-6">
       <h3 className="text-lg text-gray-500 font-medium tracking-wider uppercase mb-8 text-center">
         Overall Feedback
       </h3>
 
       <div className="text-center">
-        <textarea
+        <Textarea
           value={feedback}
           onChange={(e) => onFeedbackChange(e.target.value)}
           placeholder="Add feedback for the student..."
-          className="w-full max-w-md px-4 py-3 border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black/20 transition-all duration-200"
+          className="w-full max-w-md mx-auto resize-none max-h-40 h-24"
           rows={3}
         />
       </div>
-    </motion.div>
+    </div>
   )
 }

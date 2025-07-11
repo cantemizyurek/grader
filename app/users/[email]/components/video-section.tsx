@@ -1,5 +1,6 @@
 import { PlayIcon } from 'lucide-react'
 import { ScoreSelector } from '@/components/ui/score-selector'
+import { Textarea } from '@/components/ui/textarea'
 
 export function VideoSection({
   loomUrl,
@@ -64,11 +65,11 @@ export function VideoSection({
 
         <div className="text-center">
           <h4 className="text-sm font-medium text-gray-700 mb-4">Feedback</h4>
-          <textarea
+          <Textarea
             value={feedback}
             onChange={(e) => onFeedbackChange(e.target.value)}
             placeholder="Add feedback for the presentation..."
-            className="w-full max-w-md px-4 py-3 border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-black/5 focus:border-black/20 transition-all duration-200"
+            className="w-full max-w-md mx-auto resize-none max-h-40 h-24"
             rows={3}
           />
         </div>
