@@ -9,16 +9,24 @@ import { LearnedSection } from './components/learned-section'
 import { NotLearnedSection } from './components/not-learned-section'
 import { SharedContentSection } from './components/shared-content-section'
 import { SharingSection } from './components/sharing-section'
+import { OverallFeedbackSection } from './components/overall-feedback-section'
 import { Button } from '@/components/ui/button'
-import { ArrowLeftIcon, Loader2, SaveIcon } from 'lucide-react'
-import { saveUser } from './action'
+import {
+  ArrowLeftIcon,
+  Loader2,
+  SaveIcon,
+  FileSpreadsheetIcon,
+} from 'lucide-react'
+import { saveUser, saveToGoogleSheets } from './action'
 import Link from 'next/link'
 import { useTransition } from 'react'
 import { useGradingForm } from '@/lib/hooks/use-grading-form'
 
 export default function PageClient({ user }: { user: User }) {
   const [isPending, startTransition] = useTransition()
-  const { formState, updateField, updateSharing, getUpdatedUser } = useGradingForm(user)
+  const [isSavingToSheets, startSavingToSheetsTransition] = useTransition()
+  const { formState, updateField, updateSharing, getUpdatedUser } =
+    useGradingForm(user)
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-12 space-y-16 relative">
@@ -41,10 +49,16 @@ export default function PageClient({ user }: { user: User }) {
         activitiesFeedback={formState.activitiesFeedback}
         questionsScore={formState.questionsScore}
         questionsFeedback={formState.questionsFeedback}
-        onActivitiesScoreChange={(value) => updateField('activitiesScore', value)}
-        onActivitiesFeedbackChange={(value) => updateField('activitiesFeedback', value)}
+        onActivitiesScoreChange={(value) =>
+          updateField('activitiesScore', value)
+        }
+        onActivitiesFeedbackChange={(value) =>
+          updateField('activitiesFeedback', value)
+        }
         onQuestionsScoreChange={(value) => updateField('questionsScore', value)}
-        onQuestionsFeedbackChange={(value) => updateField('questionsFeedback', value)}
+        onQuestionsFeedbackChange={(value) =>
+          updateField('questionsFeedback', value)
+        }
       />
 
       <QuestionsSection questions={user.questions} />
@@ -65,6 +79,11 @@ export default function PageClient({ user }: { user: User }) {
         sharing={formState.sharing}
         onSharingChange={updateSharing}
         itemVariants={{}}
+      />
+
+      <OverallFeedbackSection
+        feedback={formState.overallFeedback}
+        onFeedbackChange={(value) => updateField('overallFeedback', value)}
       />
 
       <div className="flex justify-end">
@@ -96,6 +115,32 @@ export default function PageClient({ user }: { user: User }) {
                 <SaveIcon className="w-4 h-4 mr-1" />
               )}
               Save
+            </Button>
+            <Button
+              className="rounded-full px-4"
+              size="sm"
+              variant="outline"
+              onClick={async () => {
+                startSavingToSheetsTransition(async () => {
+                  try {
+                    const updatedUser = getUpdatedUser()
+                    await saveUser(updatedUser)
+                    const result = await saveToGoogleSheets(updatedUser)
+                    if (result.authUrl) {
+                      window.open(result.authUrl, '_blank')
+                    }
+                  } catch (error) {
+                    console.error('Failed to save to Google Sheets:', error)
+                  }
+                })
+              }}
+            >
+              {isSavingToSheets ? (
+                <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+              ) : (
+                <FileSpreadsheetIcon className="w-4 h-4 mr-1" />
+              )}
+              Save to Sheets
             </Button>
           </div>
         </div>

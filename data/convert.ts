@@ -60,7 +60,7 @@ interface CSVRow {
 
 function calculateLateDays(timestamp: Date, deadline: Date): number {
   if (timestamp <= deadline) return 0
-  
+
   const diffInMs = timestamp.getTime() - deadline.getTime()
   return Math.ceil(diffInMs / (1000 * 60 * 60 * 24))
 }
@@ -72,6 +72,7 @@ function createInitialScore() {
     presentation: { score: null, feedback: null },
     discordShare: null,
     socialShare: null,
+    overallFeedback: null,
   }
 }
 
@@ -103,8 +104,7 @@ async function main() {
     }
   })
 
-  // Group by email and keep the latest submission
-  const userMap = new Map<string, typeof processedData[0]>()
+  const userMap = new Map<string, (typeof processedData)[0]>()
 
   for (const user of processedData) {
     const existing = userMap.get(user.email)
@@ -114,12 +114,11 @@ async function main() {
   }
 
   const users = Array.from(userMap.values())
-  
-  fs.writeFileSync(
-    'data/data.json',
-    JSON.stringify(users, null, 2)
+
+  fs.writeFileSync('data/data.json', JSON.stringify(users, null, 2))
+  console.log(
+    `Data converted and saved to data.json - ${users.length} unique users`
   )
-  console.log(`Data converted and saved to data.json - ${users.length} unique users`)
 }
 
 main()

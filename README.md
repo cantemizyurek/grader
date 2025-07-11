@@ -51,6 +51,10 @@ The grading configuration is set in `lib/config.ts`:
 - **Bonus Points**:
   - Discord Share: 1 point
   - Social Share: 2 points
+- **Google Sheets**:
+  - `spreadsheetId`: Leave empty to create a new spreadsheet, or specify an existing spreadsheet ID
+  - `spreadsheetName`: Name for new spreadsheets (only used if spreadsheetId is empty)
+  - `graderName`: The grader's name that will be inserted in B2 when exporting to sheets
 
 ## Running the Application
 
@@ -108,7 +112,65 @@ The converter generates a JSON file at `data/data.json` with the following struc
 - Calculated late days
 - Initial score structure for grading (activities, questions, presentation, bonuses)
 
-## Notes
+## Google Sheets Integration
 
-- The system automatically deduplicates submissions by email, keeping only the latest submission per student
-- Late days are calculated from the submission deadline configured in `lib/config.ts`
+The application includes Google Sheets integration to export student data. To set this up:
+
+### 1. Create Google Cloud Project
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select an existing one
+3. Enable the Google Sheets API for your project
+
+### 2. Create OAuth 2.0 Credentials
+
+1. Go to APIs & Services > Credentials
+2. Click "Create Credentials" > "OAuth client ID"
+3. Choose "Web application" as the application type
+4. Add `http://localhost:3000/api/auth/callback` to Authorized redirect URIs
+
+### 3. Configure Environment Variables
+
+1. Copy `.env.example` to `.env.local`:
+
+```bash
+cp .env.example .env.local
+```
+
+2. Add your Google credentials to `.env.local`:
+
+```env
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_REDIRECT_URL=http://localhost:3000/api/auth/callback
+```
+
+### 4. Using the Google Sheets Export
+
+1. Navigate to a student's grading page
+2. Click the "Save to Sheets" button
+3. If not authenticated, you'll be redirected to Google OAuth
+4. After authentication, the system will:
+   - Check if a sheet with the student's name already exists
+   - If it doesn't exist: duplicate the first sheet and rename it with the student's name
+   - If it does exist: use the existing sheet
+   - Update the student's the data in the sheet
+
+#### Specifying a Spreadsheet
+
+You can configure which spreadsheet to use in `lib/config.ts`:
+
+```typescript
+googleSheets: {
+  // Option 1: Leave empty to create a new spreadsheet
+  spreadsheetId: '',
+
+  // Option 2: Use an existing spreadsheet by ID
+  spreadsheetId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+}
+```
+
+To find a spreadsheet ID: Open the spreadsheet in Google Sheets and copy the ID from the URL:
+`https://docs.google.com/spreadsheets/d/[SPREADSHEET_ID]/edit`
+
+**Important**: Make sure your spreadsheet has at least one sheet that will serve as the template. This first sheet will be duplicated for each student.

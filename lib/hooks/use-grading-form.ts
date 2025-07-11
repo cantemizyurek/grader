@@ -13,6 +13,7 @@ export interface GradingFormState {
     discord: boolean
     socialMedia: boolean
   }
+  overallFeedback: string
 }
 
 export function useGradingForm(initialUser: User) {
@@ -28,6 +29,7 @@ export function useGradingForm(initialUser: User) {
       discord: initialUser.score.discordShare ?? false,
       socialMedia: initialUser.score.socialShare ?? false,
     },
+    overallFeedback: initialUser.score.overallFeedback ?? '',
   })
 
   const updateField = useCallback(<K extends keyof GradingFormState>(
@@ -60,6 +62,7 @@ export function useGradingForm(initialUser: User) {
         },
         discordShare: formState.sharing.discord,
         socialShare: formState.sharing.socialMedia,
+        overallFeedback: formState.overallFeedback,
       },
     }
   }, [initialUser, formState])

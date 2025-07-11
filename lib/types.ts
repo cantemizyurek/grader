@@ -9,6 +9,7 @@ export interface Score {
   presentation: ScoreSection
   discordShare: boolean | null
   socialShare: boolean | null
+  overallFeedback: string | null
 }
 
 export interface User {
