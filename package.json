@@ -10,9 +10,11 @@
     "convert": "tsx data/convert.ts"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^1.3.23",
     "@number-flow/react": "^0.5.10",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-slot": "^1.2.3",
+    "ai": "^4.3.17",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "google-auth-library": "^10.1.0",

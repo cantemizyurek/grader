@@ -1,6 +1,7 @@
 import { PlayIcon } from 'lucide-react'
 import { ScoreSelector } from '@/components/ui/score-selector'
 import { Textarea } from '@/components/ui/textarea'
+import { TextAreaAI } from '@/components/ui/textarea-ai'
 
 export function VideoSection({
   loomUrl,
@@ -63,15 +64,27 @@ export function VideoSection({
           />
         </div>
 
-        <div className="text-center">
+        <div className="text-center mx-auto">
           <h4 className="text-sm font-medium text-gray-700 mb-4">Feedback</h4>
-          <Textarea
-            value={feedback}
-            onChange={(e) => onFeedbackChange(e.target.value)}
-            placeholder="Add feedback for the presentation..."
-            className="w-full max-w-md mx-auto resize-none max-h-40 h-24"
-            rows={3}
-          />
+          <div className="w-full max-w-md mx-auto">
+            <TextAreaAI
+              prompt={`
+Please refine this feedback to make it more specific and actionable while preserving its tone and message. Guidelines:
+- Keep all existing positive observations intact
+- Add specific examples or details to support the praise given
+- Make suggestions only if the original feedback already contains areas for improvement
+- Do NOT add criticism or "areas to improve" if none exist in the original
+- Maintain first-person perspective ("I" statements)
+- Keep it concise (under 50 words)
+- If the feedback is entirely positive, enhance it by making the praise more specific and meaningful
+The goal is to make good feedback better, not to find problems where none exist.`.trim()}
+              value={feedback}
+              onChange={(e) => onFeedbackChange(e.target.value)}
+              placeholder="Add feedback for the presentation..."
+              className="w-full max-w-md resize-none max-h-40 h-24"
+              rows={3}
+            />
+          </div>
         </div>
       </div>
     </div>

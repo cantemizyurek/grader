@@ -1,7 +1,7 @@
 import { motion } from 'motion/react'
 import { BookOpenIcon, ExternalLinkIcon } from 'lucide-react'
 import { ScoreSelector } from '@/components/ui/score-selector'
-import { Textarea } from '@/components/ui/textarea'
+import { TextAreaAI } from '@/components/ui/textarea-ai'
 
 export function NotebookSection({
   notebookUrl,
@@ -83,17 +83,28 @@ export function NotebookSection({
             />
           </div>
 
-          <div className="text-center">
+          <div className="text-center mx-auto">
             <h4 className="text-sm font-medium text-gray-700 mb-4">
               Activities Feedback
             </h4>
-            <Textarea
-              value={activitiesFeedback}
-              onChange={(e) => onActivitiesFeedbackChange(e.target.value)}
-              placeholder="Add feedback for activities..."
-              className="w-full max-w-md mx-auto resize-none max-h-40 h-24"
-              rows={3}
-            />
+            <div className="w-full max-w-md mx-auto">
+              <TextAreaAI
+                prompt={`
+                Please enhance this feedback for notebook activities to be more constructive and specific. Guidelines:
+                - Focus on the student's completion and understanding of activities
+                - Provide specific examples of what they did well or areas for improvement
+                - Keep feedback encouraging and actionable
+                - Maintain first-person perspective ("I" statements)
+                - Keep it concise (under 60 words)
+                - If positive, make the praise more specific and meaningful
+                The goal is to help the student understand their performance on the activities.`.trim()}
+                value={activitiesFeedback}
+                onChange={(e) => onActivitiesFeedbackChange(e.target.value)}
+                placeholder="Add feedback for activities..."
+                className="w-full max-w-md mx-auto resize-none max-h-40 h-24"
+                rows={3}
+              />
+            </div>
           </div>
         </div>
 
@@ -110,17 +121,29 @@ export function NotebookSection({
             />
           </div>
 
-          <div className="text-center">
+          <div className="text-center mx-auto">
             <h4 className="text-sm font-medium text-gray-700 mb-4">
               Questions Feedback
             </h4>
-            <Textarea
-              value={questionsFeedback}
-              onChange={(e) => onQuestionsFeedbackChange(e.target.value)}
-              placeholder="Add feedback for the student..."
-              className="w-full max-w-md mx-auto resize-none max-h-40 h-24"
-              rows={3}
-            />
+            <div className="w-full max-w-md mx-auto">
+              <TextAreaAI
+                prompt={`
+                  Please enhance this feedback for student questions to be more helpful and encouraging. Guidelines:
+                  - Address the quality and thoughtfulness of their questions
+                  - Provide guidance on how their questions demonstrate understanding or curiosity
+                  - If no questions were asked, encourage future questioning
+                  - Keep feedback supportive and constructive
+                  - Maintain first-person perspective ("I" statements)
+                  - Keep it concise (under 50 words)
+                  - Focus on the learning value of asking good questions
+                  The goal is to encourage thoughtful questioning and engagement.`.trim()}
+                value={questionsFeedback}
+                onChange={(e) => onQuestionsFeedbackChange(e.target.value)}
+                placeholder="Add feedback for the student..."
+                className="w-full max-w-md mx-auto resize-none max-h-40 h-24"
+                rows={3}
+              />
+            </div>
           </div>
         </div>
       </div>
